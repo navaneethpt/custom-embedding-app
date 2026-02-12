@@ -1,0 +1,31 @@
+Database Services in Cloud Computing
+
+Relational databases are fundamental to modern applications.
+Amazon RDS provides managed relational database services for MySQL, PostgreSQL, and Oracle.
+Azure SQL Database offers similar managed database capabilities on Microsoft Azure.
+Google Cloud SQL provides managed MySQL and PostgreSQL databases on GCP.
+
+NoSQL databases offer flexible schema and horizontal scalability.
+AWS DynamoDB is a fully managed NoSQL database service.
+Azure Cosmos DB provides globally distributed NoSQL database capabilities.
+Google Cloud Firestore offers a scalable NoSQL document database.
+
+Data warehousing enables analytics on large datasets.
+Amazon Redshift is a fast data warehouse service for analytics.
+Azure Synapse Analytics provides integrated analytics platform.
+Google BigQuery offers serverless data warehouse for analytics.
+
+Caching improves application performance significantly.
+AWS ElastiCache provides in-memory caching with Redis and Memcached.
+Azure Cache for Redis delivers managed Redis caching service.
+Google Cloud Memorystore offers managed Redis and Memcached.
+
+Database migration tools help move data between systems.
+AWS Database Migration Service simplifies database migration to AWS.
+Azure Database Migration Service helps migrate databases to Azure.
+Google Database Migration Service enables migration to Cloud SQL.
+
+Backup and disaster recovery are critical for data protection.
+Automated backups protect against data loss and corruption.
+Point-in-time recovery allows restoration to specific moments.
+Multi-region replication ensures high availability and disaster recovery.

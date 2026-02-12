@@ -1,0 +1,30 @@
+Cloud Computing Services Overview
+
+Amazon Web Services (AWS) provides comprehensive cloud computing services.
+AWS S3 is a highly scalable object storage service for storing and retrieving data.
+AWS EC2 offers virtual machine instances for compute resources.
+AWS Lambda enables serverless computing for running code without managing servers.
+
+Microsoft Azure offers similar cloud services to AWS.
+Azure Blob Storage is equivalent to AWS S3 for object storage.
+Azure Virtual Machines provide compute instances like EC2.
+Azure Functions compete with AWS Lambda for serverless workloads.
+
+Google Cloud Platform (GCP) is another major cloud provider.
+GCP Cloud Storage is their object storage solution similar to S3 and Blob Storage.
+Google Compute Engine provides virtual machine instances.
+Cloud Functions enable serverless computing on GCP.
+
+All three providers offer database services.
+AWS RDS provides relational database management.
+Azure SQL Database offers managed database services.
+Google Cloud SQL provides managed MySQL and PostgreSQL.
+
+Container orchestration is important for modern applications.
+Kubernetes is widely used for container management.
+AWS EKS, Azure AKS, and GCP GKE all provide managed Kubernetes services.
+
+Storage options include object storage, block storage, and file storage.
+S3, Blob Storage, and Cloud Storage are object storage services.
+EBS, Azure Disks, and Persistent Disks provide block storage.
+EFS, Azure Files, and Filestore offer file storage solutions.

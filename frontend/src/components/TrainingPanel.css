@@ -1,0 +1,204 @@
+.training-panel h2 {
+  color: #2d3436;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.training-control {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.train-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.train-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.train-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.status-badge {
+  background: #00b894;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.status-badge.success {
+  background: #00b894;
+}
+
+.error-message {
+  background: #ff7675;
+  color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.warning-message {
+  background: #fdcb6e;
+  color: #2d3436;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.training-progress {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
+
+.training-progress h3 {
+  color: #2d3436;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 30px;
+  background: #dfe6e9;
+  border-radius: 15px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+  transition: width 0.5s ease;
+  border-radius: 15px;
+}
+
+.loss-value {
+  font-size: 1.1rem;
+  color: #667eea;
+  font-weight: 600;
+  margin: 0.5rem 0;
+}
+
+.status-text {
+  color: #636e72;
+  font-style: italic;
+}
+
+.loss-chart {
+  margin: 1.5rem 0;
+}
+
+.loss-chart h3 {
+  color: #2d3436;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.model-config,
+.training-stats,
+.vocabulary-section {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+  margin-top: 1.5rem;
+}
+
+.model-config h3,
+.training-stats h3,
+.vocabulary-section h3 {
+  color: #2d3436;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.config-grid,
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.config-item,
+.stat-item {
+  background: white;
+  padding: 1rem;
+  border-radius: 6px;
+  border-left: 3px solid #667eea;
+}
+
+.config-label,
+.stat-label {
+  display: block;
+  color: #636e72;
+  font-size: 0.9rem;
+  margin-bottom: 0.25rem;
+}
+
+.config-value,
+.stat-value {
+  display: block;
+  color: #2d3436;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.top-words {
+  margin-top: 1rem;
+}
+
+.top-words h4 {
+  color: #2d3436;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.word-tags,
+.vocabulary-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.word-tag,
+.vocab-word {
+  background: white;
+  color: #667eea;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  border: 1px solid #667eea;
+}
+
+.vocab-more {
+  color: #636e72;
+  font-style: italic;
+  padding: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  .config-grid,
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
