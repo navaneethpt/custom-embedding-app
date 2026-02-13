@@ -1,8 +1,10 @@
-package org.example.ml.service;
+package org.search.embedding.service;
 
 import jakarta.annotation.PreDestroy;
-import org.example.ml.model.SiameseEmbedding;
-import org.example.ml.model.SiameseEmbedding.TrainingPair;
+import org.search.embedding.model.SiameseEmbedding;
+import org.search.embedding.model.SiameseEmbedding.TrainingPair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,7 +17,9 @@ import java.util.Map;
  */
 @Service
 public class EmbeddingService {
-    
+
+    private static final Logger logger = LoggerFactory.getLogger(EmbeddingService.class);
+
     @Autowired
     private DocumentProcessor documentProcessor;
     
@@ -42,29 +46,29 @@ public class EmbeddingService {
      */
     public synchronized void trainModel() throws Exception {
         if (model != null && model.isTrained()) {
-            System.out.println("Model already trained. Creating new instance...");
+            logger.info("Model already trained. Creating new instance...");
             model.close();
         }
-        
+
         // Process documents
-        System.out.println("Processing documents from: " + documentsFolder);
+        logger.info("Processing documents from: {}", documentsFolder);
         try {
             trainingPairs = documentProcessor.processDocumentsFolder(documentsFolder);
         } catch (Exception e) {
-            System.err.println("Error processing documents: " + e.getMessage());
-            System.out.println("Using sample training pairs instead...");
+            logger.error("Error processing documents: {}", e.getMessage(), e);
+            logger.info("Using sample training pairs instead...");
             trainingPairs = documentProcessor.createSamplePairs();
         }
-        
+
         if (trainingPairs.isEmpty()) {
             throw new IllegalStateException("No training pairs generated");
         }
-        
+
         // Create and train model
-        model = new SiameseEmbedding(embedDim, margin, epochs, learningRate);
+        model = createModel(embedDim, margin, epochs, learningRate);
         model.train(trainingPairs);
-        
-        System.out.println("Model training completed successfully");
+
+        logger.info("Model training completed successfully");
     }
     
     /**
@@ -165,6 +169,14 @@ public class EmbeddingService {
         model.saveModel(path);
     }
     
+    /**
+     * Create a new SiameseEmbedding model instance
+     * Protected for testing purposes
+     */
+    protected SiameseEmbedding createModel(int embedDim, float margin, int epochs, float learningRate) {
+        return new SiameseEmbedding(embedDim, margin, epochs, learningRate);
+    }
+
     /**
      * Cleanup resources on shutdown
      */

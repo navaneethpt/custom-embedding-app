@@ -1,6 +1,8 @@
-package org.example.ml.service;
+package org.search.embedding.service;
 
-import org.example.ml.model.SiameseEmbedding.TrainingPair;
+import org.search.embedding.model.SiameseEmbedding.TrainingPair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -17,7 +19,9 @@ import java.util.stream.Collectors;
  */
 @Service
 public class DocumentProcessor {
-    
+
+    private static final Logger logger = LoggerFactory.getLogger(DocumentProcessor.class);
+
     private static final int MAX_DISTANCE = 5; // Maximum word distance to consider
     private static final String[] STOP_WORDS = {
         "a", "an", "the", "is", "are", "was", "were", "in", "on", "at", 
@@ -39,15 +43,15 @@ public class DocumentProcessor {
             throw new IOException("No .txt files found in: " + folderPath);
         }
         
-        System.out.println("Processing " + files.length + " documents...");
-        
+        logger.info("Processing {} documents...", files.length);
+
         List<TrainingPair> allPairs = new ArrayList<>();
         for (File file : files) {
-            System.out.println("Processing: " + file.getName());
+            logger.debug("Processing: {}", file.getName());
             List<TrainingPair> filePairs = processDocument(file.getAbsolutePath());
             allPairs.addAll(filePairs);
         }
-        
+
         // Deduplicate pairs
         Map<String, TrainingPair> uniquePairs = new HashMap<>();
         for (TrainingPair pair : allPairs) {
@@ -56,9 +60,9 @@ public class DocumentProcessor {
                 uniquePairs.put(key, pair);
             }
         }
-        
+
         List<TrainingPair> result = new ArrayList<>(uniquePairs.values());
-        System.out.println("Generated " + result.size() + " unique training pairs");
+        logger.info("Generated {} unique training pairs", result.size());
         return result;
     }
     

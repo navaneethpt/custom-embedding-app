@@ -1,8 +1,10 @@
-package org.example.ml.controller;
+package org.search.embedding.controller;
 
-import org.example.ml.dto.SimilarityRequest;
-import org.example.ml.service.EmbeddingService;
-import org.example.ml.service.GenericEmbeddingService;
+import org.search.embedding.dto.SimilarityRequest;
+import org.search.embedding.service.EmbeddingService;
+import org.search.embedding.service.GenericEmbeddingService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +21,9 @@ import java.util.Map;
 @RequestMapping("/api")
 @CrossOrigin(origins = "*") // For development - restrict in production
 public class EmbeddingController {
-    
+
+    private static final Logger logger = LoggerFactory.getLogger(EmbeddingController.class);
+
     @Autowired
     private EmbeddingService embeddingService;
     
@@ -37,7 +41,7 @@ public class EmbeddingController {
                 try {
                     embeddingService.trainModel();
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error("Error during model training", e);
                 }
             }).start();
             
@@ -233,10 +237,10 @@ public class EmbeddingController {
      * Helper method to handle errors
      */
     private ResponseEntity<Map<String, Object>> handleError(String message, Exception e) {
+        logger.error("Controller error - {}: {}", message, e.getMessage(), e);
         Map<String, Object> error = new HashMap<>();
         error.put("error", message);
         error.put("details", e.getMessage());
-        e.printStackTrace();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 }

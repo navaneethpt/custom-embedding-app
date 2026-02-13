@@ -1,4 +1,4 @@
-package org.example.ml.service;
+package org.search.embedding.service;
 
 import ai.djl.Model;
 import ai.djl.huggingface.translator.TextEmbeddingTranslatorFactory;

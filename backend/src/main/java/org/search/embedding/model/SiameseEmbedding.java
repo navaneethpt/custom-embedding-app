@@ -1,4 +1,4 @@
-package org.example.ml.model;
+package org.search.embedding.model;
 
 import ai.djl.Model;
 import ai.djl.engine.Engine;
@@ -20,6 +20,9 @@ import ai.djl.training.tracker.Tracker;
 import ai.djl.translate.NoopTranslator;
 import ai.djl.inference.Predictor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -28,6 +31,8 @@ import java.util.concurrent.ConcurrentHashMap;
  * Based on contrastive learning approach for semantic similarity
  */
 public class SiameseEmbedding {
+
+    private static final Logger logger = LoggerFactory.getLogger(SiameseEmbedding.class);
 
     private final Map<String, Integer> wordToIdx = new ConcurrentHashMap<>();
     private final List<String> vocabulary = new ArrayList<>();
@@ -148,7 +153,7 @@ public class SiameseEmbedding {
         }
         
         vocabSize = vocabulary.size();
-        System.out.println("Vocabulary built: " + vocabSize + " unique words");
+        logger.info("Vocabulary built: {} unique words", vocabSize);
     }
     
     /**
@@ -178,77 +183,77 @@ public class SiameseEmbedding {
      * Train the Siamese network on word pairs
      */
     public void train(List<TrainingPair> pairs) throws Exception {
-        System.out.println("Starting training with " + pairs.size() + " pairs...");
-        System.out.println("DJL Engine: " + Engine.getInstance().getEngineName());
-        
+        logger.info("Starting training with {} pairs...", pairs.size());
+        logger.info("DJL Engine: {}", Engine.getInstance().getEngineName());
+
         progress.isTraining = true;
         progress.status = "Building vocabulary...";
         buildVocabulary(pairs);
-        
+
         progress.status = "Initializing model...";
         manager = NDManager.newBaseManager();
         model = Model.newInstance("siamese-embedding");
         model.setBlock(createEmbeddingNet());
-        
+
         Optimizer optimizer = Adam.builder()
                 .optLearningRateTracker(Tracker.fixed(learningRate))
                 .build();
-        
+
         Loss contrastiveLoss = new ContrastiveLoss(margin);
-        
+
         DefaultTrainingConfig config = new DefaultTrainingConfig(contrastiveLoss)
                 .optOptimizer(optimizer);
-        
+
         trainer = model.newTrainer(config);
         trainer.initialize(new Shape(1, vocabSize));
-        
+
         progress.status = "Training...";
         progress.lossHistory.clear();
-        
+
         for (int epoch = 0; epoch < epochs; epoch++) {
             float totalLoss = 0f;
-            
+
             for (TrainingPair pair : pairs) {
                 try {
                     NDArray x1 = oneHot(pair.word1);
                     NDArray x2 = oneHot(pair.word2);
                     NDArray y = manager.create(new float[]{pair.similarity}).reshape(1, 1);
-                    
+
                     NDArray e1;
                     NDArray e2;
-                    
+
                     try (GradientCollector gc = trainer.newGradientCollector()) {
                         e1 = trainer.forward(new NDList(x1)).singletonOrThrow();
                         e2 = trainer.forward(new NDList(x2)).singletonOrThrow();
-                        
+
                         NDArray lossVal = contrastiveLoss.evaluate(new NDList(y), new NDList(e1, e2));
                         totalLoss += lossVal.toFloatArray()[0];
-                        
+
                         gc.backward(lossVal);
                     }
-                    
+
                     trainer.step();
                 } catch (Exception e) {
-                    System.err.println("Error processing pair: " + pair + " - " + e.getMessage());
+                    logger.error("Error processing pair: {} - {}", pair, e.getMessage(), e);
                 }
             }
-            
+
             progress.currentEpoch = epoch + 1;
             progress.currentLoss = totalLoss;
             progress.lossHistory.add(totalLoss);
-            
+
             if (epoch % 50 == 0 || epoch == epochs - 1) {
-                System.out.printf("Epoch %d/%d, Loss: %.4f%n", epoch + 1, epochs, totalLoss);
+                logger.info("Epoch {}/{}, Loss: {:.4f}", epoch + 1, epochs, totalLoss);
             }
         }
-        
+
         // Initialize predictor for inference
         predictor = model.newPredictor(new NoopTranslator());
         isTrained = true;
         progress.isTraining = false;
         progress.status = "Training completed";
-        
-        System.out.println("Training completed successfully!");
+
+        logger.info("Training completed successfully!");
     }
     
     /**
@@ -352,6 +357,6 @@ public class SiameseEmbedding {
             throw new IllegalStateException("Model not trained yet");
         }
         model.save(java.nio.file.Paths.get(path), "siamese-embedding");
-        System.out.println("Model saved to: " + path);
+        logger.info("Model saved to: {}", path);
     }
 }

@@ -1,5 +1,7 @@
-package org.example.ml.service;
+package org.search.embedding.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -11,7 +13,9 @@ import java.util.Arrays;
  */
 @Service
 public class HuggingFaceService {
-    
+
+    private static final Logger logger = LoggerFactory.getLogger(HuggingFaceService.class);
+
     private static final String MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2";
     
     /**
@@ -28,7 +32,7 @@ public class HuggingFaceService {
             
             return cosineSimilarity(emb1, emb2);
         } catch (Exception e) {
-            System.err.println("Error calculating generic similarity: " + e.getMessage());
+            logger.error("Error calculating generic similarity: {}", e.getMessage(), e);
             // Fallback to simple string similarity
             return simpleStringSimilarity(word1, word2);
         }

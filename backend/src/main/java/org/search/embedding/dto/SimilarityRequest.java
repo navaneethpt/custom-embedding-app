@@ -1,4 +1,4 @@
-package org.example.ml.dto;
+package org.search.embedding.dto;
 
 /**
  * Request DTO for similarity calculation
