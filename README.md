@@ -302,10 +302,9 @@ Contributions are welcome! Please:
 
 ## 👤 Author
 
-Your Name - [Your GitHub](https://github.com/yourusername)
+Navaneeth P T - [https://github.com/navaneethpt](https://github.com/yourusername)
 
 ## 🙏 Acknowledgments
 
-- Blog post by [Navaneeth P T](https://navaneethpt.tech/)
 - DJL (Deep Java Library) team
 - HuggingFace for pre-trained models
